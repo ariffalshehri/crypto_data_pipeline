@@ -1,0 +1,66 @@
+version: '3.8'
+
+x-airflow-common:
+  &airflow-common
+  image: apache/airflow:2.8.1
+  environment:
+    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://admin:admin_password@postgres:5432/crypto_db
+    - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    - AIRFLOW__WEBSERVER__SECRET_KEY=crypto_pipeline_secret_key_12345
+    - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0VCYVZTPPafcU3QSNFxgEQb40X80=
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./scripts:/opt/airflow/scripts
+    - ./data:/opt/airflow/data
+  depends_on:
+    - postgres
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: crypto_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+      POSTGRES_DB: crypto_db
+    ports:
+      - "5432:5432"
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow_webserver
+    ports:
+      - "8080:8080"
+    command: webserver
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow_scheduler
+    command: scheduler
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow_init
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+            --username admin \
+            --firstname Arif \
+            --lastname Alshehri \
+            --role Admin \
+            --email admin@example.com \
+            --password admin
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
