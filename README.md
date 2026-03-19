@@ -37,8 +37,11 @@ Username: admin
 
 Password: admin
 
+
 --Metabase UI--
 
 URL: http://localhost:3000
 
 (Setup: Connect to the PostgreSQL database using your database credentials to view the dashboards).
+<img width="1403" height="595" alt="Screenshot 2026-03-19 at 6 33 49 AM" src="https://github.com/user-attachments/assets/2fda3ced-baec-41e3-a813-cc16f753e088" />
+<img width="1416" height="853" alt="Screenshot 2026-03-19 at 4 24 49 AM" src="https://github.com/user-attachments/assets/6b7fb2bc-d2b0-4640-8b74-d08a7f114a5d" />
