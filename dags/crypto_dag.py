@@ -32,5 +32,4 @@ with DAG(
         bash_command='python /opt/airflow/scripts/transform.py'
     )
 
-    # تحديد تسلسل التنفيذ النهائي
     extract_task >> load_task >> transform_task

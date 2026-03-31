@@ -31,7 +31,7 @@ The entire infrastructure runs locally in isolated Docker containers.
 
 --Apache Airflow UI--
 
-URL: http://localhost:8080
+URL:  http://localhost:8080
 
 Username: admin
 
